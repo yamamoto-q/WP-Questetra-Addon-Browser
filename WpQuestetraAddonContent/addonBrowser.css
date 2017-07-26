@@ -17,6 +17,24 @@
   box-sizing: border-box;
 }
 /**
+ * 正方形　画像比率
+ **/
+.ttb-cube-o {
+  position: relative;
+}
+.ttb-cube-o:before {
+  display: block;
+  content: '';
+  padding-top: 100%;
+}
+.ttb-cube-o .ttb-cube-i {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+/**
  * 背景をカバー/中央に
  **/
 .ttb-bgcover {
@@ -36,12 +54,15 @@
   vertical-align: middle;
   height: 100%;
 }
-.addon-browser {
+/**
+ * ブラウザー表現
+ **/
+.tax-term-browser {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
 }
-.addon-browser .addon-browser-tax {
+.tax-term-browser .ttb-tax {
   width: 25%;
   cursor: pointer;
   padding: 2px;
@@ -49,42 +70,26 @@
   box-sizing: border-box;
   border-radius: 3px;
 }
-.addon-browser .addon-browser-tax .addon-browser-tax-content-wrapper {
-  position: relative;
-}
-.addon-browser .addon-browser-tax .addon-browser-tax-content-wrapper:before {
-  display: block;
-  content: '';
-  padding-top: 100%;
-}
-.addon-browser .addon-browser-tax .addon-browser-tax-content-wrapper .addon-browser-tax-content {
-  position: absolute;
-  top: 0;
+.tax-term-browser .ttb-tax .ttb-tax-thumb {
   width: 100%;
   height: 100%;
-  box-sizing: border-box;
-}
-.addon-browser .addon-browser-tax .addon-browser-tax-content-wrapper .addon-browser-tax-content .addon-browser-tax-content-img {
-  width: 100%;
-  height: 100%;
-  background-position: center center;
   display: flex;
   flex-direction: column;
-  opacity: 0.9;
+  background-position: center center;
+  opacity: 0.8;
   background-size: auto 100%;
   transition: all 0.25s ease-in-out;
 }
-.addon-browser .addon-browser-tax .addon-browser-tax-content-wrapper .addon-browser-tax-content .addon-browser-tax-content-name-desc {
-  height: 100%;
+.tax-term-browser .ttb-tax .ttb-tax-exc {
   flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   color: rgba(255, 255, 255, 0);
   transition: all 0.25s ease-out;
+  height: 100%;
 }
-.addon-browser .addon-browser-tax .addon-browser-tax-content-wrapper .addon-browser-tax-content .addon-browser-tax-content-name-content {
+.tax-term-browser .ttb-tax .ttb-tax-exc > div {
+  padding: 0.5em;
+}
+.tax-term-browser .ttb-tax .ttb-tax-name-count {
   background-color: rgba(255, 255, 255, 0.8);
   display: flex;
   flex-direction: row;
@@ -92,10 +97,10 @@
   justify-content: space-between;
   padding: 0.25em 0;
 }
-.addon-browser .addon-browser-tax .addon-browser-tax-content-wrapper .addon-browser-tax-content .addon-browser-tax-content-name-content > div {
+.tax-term-browser .ttb-tax .ttb-tax-name-count > div {
   padding: 0 0.5em;
 }
-.addon-browser .addon-browser-tax .addon-browser-tax-content-wrapper .addon-browser-tax-content .addon-browser-tax-content-name-content .addon-browser-tax-content-count {
+.tax-term-browser .ttb-tax .ttb-tax-name-count .ttb-tax-count {
   display: inline-block;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
@@ -103,20 +108,20 @@
   padding: 0 0.5em;
   margin: 0 0.25em;
 }
-.addon-browser .addon-browser-tax .addon-browser-tax-content-wrapper .addon-browser-tax-content .addon-browser-tax-content-name-content .addon-browser-tax-content-name {
+.tax-term-browser .ttb-tax .ttb-tax-name-count .ttb-tax-name {
   font-weight: nomal;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.addon-browser .addon-browser-tax:hover {
+.tax-term-browser .ttb-tax:hover {
   background-size: 50% auto;
 }
-.addon-browser .addon-browser-tax:hover .addon-browser-tax-content .addon-browser-tax-content-img {
+.tax-term-browser .ttb-tax:hover .ttb-tax-thumb {
   background-size: auto 102%;
   opacity: 1;
 }
-.addon-browser .addon-browser-tax:hover .addon-browser-tax-content .addon-browser-tax-content-name-content .addon-browser-tax-content-name {
+.tax-term-browser .ttb-tax:hover .ttb-tax-name-count .ttb-tax-name {
   text-decoration: underline;
 }
 /**

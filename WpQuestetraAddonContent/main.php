@@ -184,7 +184,7 @@ class WP_QuestetraAddonContent{
 		$res .= 'var '.$resValname . "='".json_encode($catalog)."';";
 		$res .= "</script>";
 
-		$res .= '<div id="addon-tax-browser-'.$resId.'" class="addon-browser" data-id="'.$resId.'" data-catalog="'.$resValname.'" data-view="'.$atts['view'].'">Addon Browser</div>';
+		$res .= '<div id="tax-term-browser-'.$resId.'" class="tax-term-browser" data-id="'.$resId.'" data-catalog="'.$resValname.'" data-view="'.$atts['view'].'">Addon Browser</div>';
 		return $res;
 	}
 

@@ -3,7 +3,7 @@
   	var HASH_SEPARATOR = "__";
   	var catalogs = {};　// データ
 
-    $(".addon-browser").each(function(index, el) {
+    $(".tax-term-browser").each(function(index, el) {
     	var me = this;
     	var browserId = $(this).data('id');
     	var view = $(this).data('view').toLowerCase();
@@ -70,27 +70,25 @@
 	        for (var i = catalogs[browserId].terms.length - 1; i >= 0; i--) {
 	        	var term = catalogs[browserId].terms[i];
 
-	        	var itemHtml = '<div class="addon-browser-tax" data-slug="' + term.slug + '" data-id="' + browserId + '">';
+	        	var itemHtml = '<div class="ttb-tax" data-slug="' + term.slug + '" data-id="' + browserId + '">';
 
-	        	itemHtml += '<div class="addon-browser-tax-content-wrapper">';
-	        	itemHtml += '<div class="addon-browser-tax-content">';
+	        	itemHtml += '<div class="ttb-cube-o">';
+	        	itemHtml += '<div class="ttb-cube-i">';
 
 	        	//itemHtml += '<div class="addon-browser-tax-content-i">';
 
-	        	itemHtml += '<div class="addon-browser-tax-content-img" style="background-image:url(' + term.img + ');">';// bg
+	        	itemHtml += '<div class="ttb-tax-thumb" style="background-image:url(' + term.img + ');">';// bg
 
-	        	itemHtml += '<div class="addon-browser-tax-content-name-desc">';
-	        	itemHtml += '<div class="addon-browser-tax-content-name-desc-i">';
-	        	itemHtml += term.description;
-	        	itemHtml += '</div>';
+	        	itemHtml += '<div class="ttb-tax-exc">';
+	        	itemHtml += '<div>' + term.description + '</div>';
 	        	itemHtml += '</div>';
 
-	        	itemHtml += '<div class="addon-browser-tax-content-name-content">'
-	        	itemHtml += '<div class="addon-browser-tax-content-name">' + term.name + '</div>';
-	        	itemHtml += '<div class="addon-browser-tax-content-count">' + term.count + '</div>';
+	        	itemHtml += '<div class="ttb-tax-name-count">'
+	        	itemHtml += '<div class="ttb-tax-name">' + term.name + '</div>';
+	        	itemHtml += '<div class="ttb-tax-count">' + term.count + '</div>';
 	        	itemHtml += "</div>";
 
-	        	itemHtml += "</div>";//bg
+	        	itemHtml += "</div>";// .ttb-tax-thumb
 
 	        	//itemHtml += '</div>';
 
@@ -185,7 +183,7 @@
 	}
 
 	// カタログのTermをクリックしたらモーダル表示
-    $(".addon-browser-tax").click(function(event) {
+    $(".ttb-tax").click(function(event) {
 		var slug = $(this).data('slug');
 		var browserId = $(this).data('id');
 		showAddonModal(browserId, slug);
