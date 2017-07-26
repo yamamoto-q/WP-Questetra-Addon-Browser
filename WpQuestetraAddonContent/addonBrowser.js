@@ -140,7 +140,7 @@
 
 						var $addonExcW = $('<div class="addon-browser-addon-content-eyecatch-wrapper" />');
 						var $addonExcContent = $('<div class="addon-browser-addon-content-eyecatch-content" />');
-						var $addonExc = $('<div class="addon-browser-addon-content-eyecatch-content-exc" style="background-image:url(' + post.eyecatch + ');">'+post.excerpt+'</div>');
+						var $addonExc = $('<div class="addon-browser-addon-content-eyecatch-content-exc" style="background-image:url(' + post.eyecatch + ');"><div class="addon-browser-addon-content-exc">'+post.excerpt+'</div></div>');
 
 						var $addonContent = $('<div class="addon-browser-addon-content"/>');
 						var $addon = $('<div class="addon-browser-addon" data-href="' + post.url + '"/>');

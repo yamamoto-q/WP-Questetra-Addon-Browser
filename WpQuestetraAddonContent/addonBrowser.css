@@ -162,4 +162,17 @@
   height: 100%;
   background-size: cover;
   background-position: center center;
+  display: table;
+}
+.addom-browser-modal .addom-browser-modal-outer .addom-browser-modal-inner .addom-browser-modal-content .addom-browser-modal-content-body .addom-browser-modal-content-body-posts .addon-browser-addon .addon-browser-addon-content-eyecatch-wrapper .addon-browser-addon-content-eyecatch-content .addon-browser-addon-content-eyecatch-content-exc .addon-browser-addon-content-exc {
+  display: table-cell;
+  vertical-align: middle;
+  padding: 0.5rem;
+  height: 100%;
+  color: rgba(0, 0, 0, 0);
+  transition: all 0.25s ease-in-out;
+}
+.addom-browser-modal .addom-browser-modal-outer .addom-browser-modal-inner .addom-browser-modal-content .addom-browser-modal-content-body .addom-browser-modal-content-body-posts .addon-browser-addon:hover .addon-browser-addon-content-eyecatch-wrapper .addon-browser-addon-content-eyecatch-content .addon-browser-addon-content-eyecatch-content-exc .addon-browser-addon-content-exc {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
 }
