@@ -55,6 +55,32 @@ class WP_QuestetraAddonContent{
 		}
 	}
 
+	/**
+	 * ページデータをJSON化するために配列に変換する
+	 **/
+	function _postToArr($_post){
+		$_postId = $_post->ID;
+		$_postTitle = $_post->post_title;
+		$_postExcerpt = $_post->post_excerpt;
+		$_postPermalink = get_permalink($_postId);
+
+		$_postThumbnail = "";
+		$_postThumbnailId = get_post_thumbnail_id($_postId);
+		if($_postThumbnailId){
+			$_postThumbnailArray = wp_get_attachment_image_src($_postThumbnailId, 'large');
+			$_postThumbnail = $_postThumbnailArray[0];
+		}
+
+		return array(
+			'ID' => $_postId,
+			'title' => $_postTitle,
+			'excerpt' => $_postExcerpt,
+			'url' => $_postPermalink,
+			'eyecatch' => $_postThumbnail
+		);
+	}
+
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Browser Shotecode
 	function shortcodeA($atts, $content = null){
 		$style = plugin_dir_url( __FILE__ ) . 'addonBrowser.css';
@@ -106,26 +132,7 @@ class WP_QuestetraAddonContent{
 				$itemPosts = array();
 				if(!empty($termPosts)){
 					foreach ($termPosts as $termPost){
-						$termPostId = $termPost->ID;
-						$termPostTitle = $termPost->post_title;
-						$termPostExcerpt = $termPost->post_excerpt;
-						$termPostPermalink = get_permalink($termPostId);
-
-						$termPostThumbnail = "";
-						$termPostThumbnailId = get_post_thumbnail_id($termPostId);
-						if($termPostThumbnailId){
-							$termPostThumbnailArray = wp_get_attachment_image_src($termPostThumbnailId, 'large');
-							$termPostThumbnail = $termPostThumbnailArray[0];
-						}
-
-						$itemPosts[] = array(
-							'ID' => $termPostId,
-							'title' => $termPostTitle,
-							'excerpt' => $termPostExcerpt,
-							'url' => $termPostPermalink,
-							'eyecatch' => $termPostThumbnail
-						);
-						
+						$itemPosts[] = $this->_postToArr($termPost);
 					}
 				}
 
@@ -140,6 +147,27 @@ class WP_QuestetraAddonContent{
 				);
 			}
 		}
+
+		// 直下Post
+		$directlyUnderPosts = get_posts(array(
+			'post_type' => 'page',
+			'tax_query' => array(
+				array(
+				'taxonomy' => $this->taxName,
+				'field' => 'slug',
+				'terms' => $parentTermSlug,
+				'include_children' => false
+				)
+			)
+		));
+		if(!empty($directlyUnderPosts)){
+			foreach ($directlyUnderPosts as $directlyUnderPost){
+				var_dump($directlyUnderPost);
+			}
+		}
+
+
+
 
 		$resId = $parentTermSlug;
 		$resValname = "addon_browser_" . $parentTermId;
