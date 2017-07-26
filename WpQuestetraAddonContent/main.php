@@ -55,7 +55,15 @@ class WP_QuestetraAddonContent{
 		}
 	}
 
+	// Browser Shotecode
 	function shortcodeA($atts, $content = null){
+		$style = plugin_dir_url( __FILE__ ) . 'addonBrowser.css';
+		wp_enqueue_style('addonBrowser', $style, false, false, 'all');
+
+
+		$script = plugin_dir_url( __FILE__ ) . 'addonBrowser.js';
+		wp_enqueue_script( 'addonBrowser', $script, array('jquery'), "0.1", true);
+
 		$items = array();
 
 		$atts = shortcode_atts(array(
@@ -68,6 +76,7 @@ class WP_QuestetraAddonContent{
 			$parentTerm = get_term_by('name', $atts['parent'], $this->taxName);
 			if(!empty($parentTerm)){
 				$parentTermId = $parentTerm->term_id;
+				$parentTermSlug = $parentTerm->slug;
 			}
 		}
 
@@ -132,7 +141,19 @@ class WP_QuestetraAddonContent{
 			}
 		}
 
-		echo json_encode($items);
+		$resId = "addon-browser-" . $parentTermSlug;
+		$resValname = "addon_browser_" . $parentTermId;
+
+		$catalog = array(
+			'terms' => $items
+		);
+
+		$res = '<script type="text/javascript">';
+		$res .= 'var '.$resValname . "='".json_encode($catalog)."';";
+		$res .= 'console.log(JSON.parse('.$resValname.'));';
+		$res .= "</script>";
+		$res .= '<div id="'.$resId.'"class="addon-browser" data-catalog="'.$resValname.'">Addon Browser</div>';
+		return $res;
 	}
 
 }

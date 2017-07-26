@@ -1,0 +1,23 @@
+{
+  "name": "wpaddoncontent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://yamamoto-q:p1490062@github.com/yamamoto-q/WP-Questetra-Addon-Browser.git"
+  },
+  "author": "June YAMAMOTO",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yamamoto-q/WP-Questetra-Addon-Browser/issues"
+  },
+  "homepage": "https://github.com/yamamoto-q/WP-Questetra-Addon-Browser#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-less": "^1.4.1"
+  }
+}

@@ -1,0 +1,187 @@
+.addon-browser{
+	width:100%;
+	display: flex;
+	flex-wrap: wrap;
+	.addon-browser-tax{
+		width: 25%;
+		cursor: pointer;
+		padding: 2px;
+    	//margin: 1px;
+    	//border: solid 1px rgba(0,0,0,0.125);
+    	min-width: 150px;
+    	//flex-grow: 1;
+    	box-sizing: border-box;
+    	border-radius: 3px;
+		.addon-browser-tax-content-wrapper{
+			position: relative;
+			&:before{
+				display: block;
+				content: '';
+				padding-top: 100%;
+			}
+
+			.addon-browser-tax-content{
+				position: absolute;
+				top: 0;
+			    width: 100%;
+			    height: 100%;
+			    box-sizing: border-box;
+				.addon-browser-tax-content-img{
+					width:100%;
+					height: 100%;
+					//background-size:cover;
+					background-position: center center;
+					display:flex;
+					flex-direction: column;
+
+					opacity: 0.9;
+					background-size:auto 100%;
+					transition: all 0.25s ease-in-out;
+				}
+				.addon-browser-tax-content-name-desc{
+				    height: 100%;
+				    flex-grow: 1;
+
+				    display:flex;
+				    flex-direction: column;
+				    justify-content: center;
+				    align-items: center;
+				    color:rgba(255,255,255,0);
+
+				    transition: all 0.25s ease-out;
+				}
+				.addon-browser-tax-content-name-content{
+					background-color: rgba(256,256,256,0.8);
+					display: flex;
+		    		flex-direction: row;
+		        	flex-wrap: nowrap;
+		        	justify-content: space-between;
+		        	padding: 0.25em 0;
+		        	> div {
+		        		padding: 0 0.5em;
+		        	}
+		        	.addon-browser-tax-content-count{
+		        		display: inline-block;
+		        		background-color: rgba(0,0,0,0.5);
+		        		color: white;
+		        		border-radius: 1em;
+		        		padding:0 0.5em;
+		        		margin:0 0.25em;
+		        	}
+		        	.addon-browser-tax-content-name{
+		        		font-weight: nomal;
+		        		overflow: hidden;
+		        		text-overflow: ellipsis;
+		        		white-space: nowrap;
+		        	}
+				}
+			}
+
+		}
+		
+		&:hover{
+			background-size:50% auto;
+			.addon-browser-tax-content{
+				.addon-browser-tax-content-img{
+					background-size:auto 102%;
+					opacity: 1;
+				}
+				.addon-browser-tax-content-name-desc{
+					//background-color: rgba(0,0,0,0.75);
+    				//color:rgba(255,255,255,1);
+    			}
+    			.addon-browser-tax-content-name-content{
+    				.addon-browser-tax-content-name{
+    					text-decoration: underline;
+    				}
+    			}
+			}
+		}
+	}
+}
+
+.addom-browser-modal{
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    display: none;
+    .addom-browser-modal-close{
+    	cursor: pointer;
+    }
+    .addom-browser-modal-outer{
+    	position: relative;
+    	width: 100%;
+    	height: 100%;
+    	display: table;
+    	.addom-browser-modal-inner{
+    		display: table-cell;
+    		vertical-align: middle;
+    		.addom-browser-modal-content{
+    			margin: 0 auto;
+    			background-color: white;
+    			width: 80%;
+  				max-width: 970px;
+  				border-radius: 5px;
+  				box-shadow: 0px 0px 3px brack;
+  				.addom-browser-modal-content-header{
+  					display: flex;
+  					flex-direction: row;
+	        		flex-wrap: nowrap;
+	        		justify-content: space-between;
+	        		padding: 0.5em 0;
+    				font-size: 2rem;
+    				border-bottom: solid 1px rgba(0,0,0,0.125);
+    				> div{
+    					margin:0 0.5em;
+    				}
+  				}
+  				.addom-browser-modal-content-footer{
+  					display: flex;
+  					flex-direction: row;
+	        		flex-wrap: nowrap;
+	        		justify-content: center;
+	        		padding: 0.5em 0;
+    				border-top: solid 1px rgba(0,0,0,0.125);
+  				}
+  				.addom-browser-modal-content-body{
+  					.addom-browser-modal-content-body-posts{
+  						display: flex;
+  						.addon-browser-addon{
+  							width: 250px;
+  							cursor: pointer;
+  							.addon-browser-addon-content{
+								padding: 2px;
+    							border: solid 1px rgba(0,0,0,0.25);
+    							margin: 2px;
+  							}
+  							.addon-browser-addon-content-eyecatch-wrapper{
+  								position: relative;
+								&:before{
+									display: block;
+									content: '';
+									padding-top: 52%;
+								}
+								.addon-browser-addon-content-eyecatch-content{
+									position: absolute;
+									top: 0;
+								    width: 100%;
+								    height: 100%;
+								    box-sizing: border-box;
+								    .addon-browser-addon-content-eyecatch-content-exc{
+								    	height: 100%;
+								    	background-size: cover;
+								    	background-position: center center;
+								    }
+								}
+  							}
+  						}
+  					}
+  				}
+    		}
+    	}
+    }
+}
+
