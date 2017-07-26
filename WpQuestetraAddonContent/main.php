@@ -83,18 +83,21 @@ class WP_QuestetraAddonContent{
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Browser Shotecode
 	function shortcodeA($atts, $content = null){
+		$atts = shortcode_atts(array(
+			'parent' => null,
+			'view' => 'term'
+		), $atts);
+
+		// CSS と JS を読み込む
 		$style = plugin_dir_url( __FILE__ ) . 'addonBrowser.css';
 		wp_enqueue_style('addonBrowser', $style, false, false, 'all');
-
 
 		$script = plugin_dir_url( __FILE__ ) . 'addonBrowser.js';
 		wp_enqueue_script( 'addonBrowser', $script, array('jquery'), "0.1", true);
 
-		$items = array();
-
-		$atts = shortcode_atts(array(
-			'parent' => null
-		), $atts);
+		// JSON に詰めるデータ (catalog)
+		$termsArr = array();
+		$directlyUnderPostsArr = array();
 
 		// 親ターム名からIDを検索する
 		$parentTermId = 0;
@@ -106,18 +109,21 @@ class WP_QuestetraAddonContent{
 			}
 		}
 
+		// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+		// カタログデータ作成
 		// 親タームに直下のタームを取得する
-		$terms = get_terms($this->taxName, array('parent' => $parentTermId));
-		if(!empty($terms)){
-			foreach ( $terms as $term ){
-				$termId = $term->term_id;
-				$termSlug = $term->slug;
-				$termName = $term->name;
-				$termDesc = $term->description;
-				$termCount = $term->count;
-
+		//$directlyUnder
+		$directlyUnderTerms = get_terms($this->taxName, array('parent' => $parentTermId));
+		if(!empty($directlyUnderTerms)){
+			foreach ($directlyUnderTerms as $directlyUnderTerm){
+				$termId = $directlyUnderTerm->term_id;
+				$termSlug = $directlyUnderTerm->slug;
+				$termName = $directlyUnderTerm->name;
+				$termDesc = $directlyUnderTerm->description;
+				$termCount = $directlyUnderTerm->count;
 				$termOptionImgVal = get_option("term_option_img_".$termId);
 
+				// Term配下の投稿を詰める
 				$termPosts = get_posts(array(
 					'post_type' => 'page',
 					'tax_query' => array(
@@ -128,7 +134,6 @@ class WP_QuestetraAddonContent{
 						)
 					)
 				));
-
 				$itemPosts = array();
 				if(!empty($termPosts)){
 					foreach ($termPosts as $termPost){
@@ -136,7 +141,8 @@ class WP_QuestetraAddonContent{
 					}
 				}
 
-				$items[] = array(
+				// JSON用に配列化
+				$termsArr[] = array(
 					'ID' => $termId,
 					'slug' => $termSlug,
 					'name' => $termName,
@@ -162,25 +168,23 @@ class WP_QuestetraAddonContent{
 		));
 		if(!empty($directlyUnderPosts)){
 			foreach ($directlyUnderPosts as $directlyUnderPost){
-				var_dump($directlyUnderPost);
+				$directlyUnderPostsArr[] = $this->_postToArr($directlyUnderPost);
 			}
 		}
 
-
-
+		$catalog = array(
+			'terms' => $termsArr,
+			'posts' => $directlyUnderPostsArr
+		);
 
 		$resId = $parentTermSlug;
 		$resValname = "addon_browser_" . $parentTermId;
 
-		$catalog = array(
-			'terms' => $items
-		);
-
 		$res = '<script type="text/javascript">';
 		$res .= 'var '.$resValname . "='".json_encode($catalog)."';";
-		$res .= 'console.log(JSON.parse('.$resValname.'));';
 		$res .= "</script>";
-		$res .= '<div id="addon-tax-browser-'.$resId.'" class="addon-browser" data-id="'.$resId.'" data-catalog="'.$resValname.'">Addon Browser</div>';
+
+		$res .= '<div id="addon-tax-browser-'.$resId.'" class="addon-browser" data-id="'.$resId.'" data-catalog="'.$resValname.'" data-view="'.$atts['view'].'">Addon Browser</div>';
 		return $res;
 	}
 

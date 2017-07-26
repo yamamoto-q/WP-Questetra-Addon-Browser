@@ -5,43 +5,47 @@
 
     $(".addon-browser").each(function(index, el) {
     	var me = this;
-    	var browserId = $(this).data('id');// = $(this).attr('id');
+    	var browserId = $(this).data('id');
+    	var view = $(this).data('view').toLowerCase();
+    	//console.log(browserId, view);
 
-    	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
-    	// Modal を追加する
-    	$header = $('<div class="ttb-m-header"><div class="ttb-m-title"></div><div class="addom-browser-modal-close">x</div></div>');
-    	$body = $('<div class="ttb-m-body">body</div>');
-    	$footer = $('<div class="ttb-m-footer"><div class="ttb-m-close">Close</div></div>');
+    	if(view == 'term'){
+	    	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	    	// Modal を追加する
+	    	$header = $('<div class="ttb-m-header"><div class="ttb-m-title"></div><div class="addom-browser-modal-close">x</div></div>');
+	    	$body = $('<div class="ttb-m-body">body</div>');
+	    	$footer = $('<div class="ttb-m-footer"><div class="ttb-m-close">Close</div></div>');
 
-	  	$modalContent = $('<div class="ttb-m-pane"></div>');
-	  	$modalInner = $('<div class="ttb-middle-i" />');
-	  	$modalOuter = $('<div class="ttb-middle-o" />');
-	  	$modal = $('<div class="ttb-modal" />').attr('id', browserId + "-modal");
+		  	$modalContent = $('<div class="ttb-m-pane"></div>');
+		  	$modalInner = $('<div class="ttb-middle-i" />');
+		  	$modalOuter = $('<div class="ttb-middle-o" />');
+		  	$modal = $('<div class="ttb-modal" />').attr('id', browserId + "-modal");
 
-	  	$modalContent.append($header);
-	  	$modalContent.append($body);
-	  	$modalContent.append($footer);
-		$modalInner.append($modalContent);
-	  	$modalOuter.append($modalInner);
-	  	$modal.append($modalOuter);
-	  	$("body").append($modal);
+		  	$modalContent.append($header);
+		  	$modalContent.append($body);
+		  	$modalContent.append($footer);
+			$modalInner.append($modalContent);
+		  	$modalOuter.append($modalInner);
+		  	$modal.append($modalOuter);
+		  	$("body").append($modal);
 
-	  	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
-	  	// モーダルのコンテンツ部分をクリックしても何も起きない
-	  	$modalContent.click(function(event) {
-	  		event.preventDefault();
-	  		event.stopPropagation();
-	  	});
+		  	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
+		  	// モーダルのコンテンツ部分をクリックしても何も起きない
+		  	$modalContent.click(function(event) {
+		  		event.preventDefault();
+		  		event.stopPropagation();
+		  	});
 
-	  	// モーダルの背景をクリックしたらモーダルを消す
-	  	$modal.click(function(event) {
-	  		hideAddonModal();
-	  	});
+		  	// モーダルの背景をクリックしたらモーダルを消す
+		  	$modal.click(function(event) {
+		  		hideAddonModal();
+		  	});
 
-	  	// モーダルを消す
-	  	$(".ttb-m-close").click(function(event) {
-	  		hideAddonModal();
-	  	});
+		  	// モーダルを消す
+		  	$(".ttb-m-close").click(function(event) {
+		  		hideAddonModal();
+		  	});
+	  	}
 
 	  	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	  	// データを取得する
@@ -60,53 +64,59 @@
         // - - - - - - - - - - - - - - - - - - - - - - - - - - 
         // カタログを表示する
         $(me).html('');
-        // Termのリストをブラウザに表示する
-        for (var i = catalogs[browserId].terms.length - 1; i >= 0; i--) {
-        	var term = catalogs[browserId].terms[i];
 
-        	var itemHtml = '<div class="addon-browser-tax" data-slug="' + term.slug + '">';
+        if(view == 'term'){
+	        // Termのリストをブラウザに表示する
+	        for (var i = catalogs[browserId].terms.length - 1; i >= 0; i--) {
+	        	var term = catalogs[browserId].terms[i];
 
-        	itemHtml += '<div class="addon-browser-tax-content-wrapper">';
-        	itemHtml += '<div class="addon-browser-tax-content">';
+	        	var itemHtml = '<div class="addon-browser-tax" data-slug="' + term.slug + '" data-id="' + browserId + '">';
 
-        	//itemHtml += '<div class="addon-browser-tax-content-i">';
+	        	itemHtml += '<div class="addon-browser-tax-content-wrapper">';
+	        	itemHtml += '<div class="addon-browser-tax-content">';
 
-        	itemHtml += '<div class="addon-browser-tax-content-img" style="background-image:url(' + term.img + ');">';// bg
+	        	//itemHtml += '<div class="addon-browser-tax-content-i">';
 
-        	itemHtml += '<div class="addon-browser-tax-content-name-desc">';
-        	itemHtml += '<div class="addon-browser-tax-content-name-desc-i">';
-        	itemHtml += term.description;
-        	itemHtml += '</div>';
-        	itemHtml += '</div>';
+	        	itemHtml += '<div class="addon-browser-tax-content-img" style="background-image:url(' + term.img + ');">';// bg
 
-        	itemHtml += '<div class="addon-browser-tax-content-name-content">'
-        	itemHtml += '<div class="addon-browser-tax-content-name">' + term.name + '</div>';
-        	itemHtml += '<div class="addon-browser-tax-content-count">' + term.count + '</div>';
-        	itemHtml += "</div>";
+	        	itemHtml += '<div class="addon-browser-tax-content-name-desc">';
+	        	itemHtml += '<div class="addon-browser-tax-content-name-desc-i">';
+	        	itemHtml += term.description;
+	        	itemHtml += '</div>';
+	        	itemHtml += '</div>';
 
-        	itemHtml += "</div>";//bg
+	        	itemHtml += '<div class="addon-browser-tax-content-name-content">'
+	        	itemHtml += '<div class="addon-browser-tax-content-name">' + term.name + '</div>';
+	        	itemHtml += '<div class="addon-browser-tax-content-count">' + term.count + '</div>';
+	        	itemHtml += "</div>";
 
-        	//itemHtml += '</div>';
+	        	itemHtml += "</div>";//bg
 
-        	itemHtml += "</div>";
-        	itemHtml += "</div>";
+	        	//itemHtml += '</div>';
 
-        	itemHtml += "</div>";
+	        	itemHtml += "</div>";
+	        	itemHtml += "</div>";
 
-        	$(me).append(itemHtml);
-        }
-        
-        // カタログのTermをクリックしたらモーダル表示
-        $(".addon-browser-tax").click(function(event) {
-  			var slug = $(this).data('slug');
-  			showAddonModal(browserId, slug);
-  		});
+	        	itemHtml += "</div>";
+
+	        	$(me).append(itemHtml);
+	        }
+    	}
     });
+
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - 
     // モーダルを表示する（ハッシュを変更する）
     function showAddonModal(browserId, slug){
 		location.hash = browserId + HASH_SEPARATOR + slug;
+	}
+
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	//　モーダルを非表示
+	function hideAddonModal(){
+		$(".ttb-modal").hide();
+		$('body').css('overflow','auto');
+		location.hash = '';
 	}
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -174,13 +184,12 @@
 		}
 	}
 
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
-	//　モーダルを非表示
-	function hideAddonModal(){
-		$(".ttb-modal").hide();
-		$('body').css('overflow','auto');
-		location.hash = '';
-	}
+	// カタログのTermをクリックしたらモーダル表示
+    $(".addon-browser-tax").click(function(event) {
+		var slug = $(this).data('slug');
+		var browserId = $(this).data('id');
+		showAddonModal(browserId, slug);
+	});
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	//　初期表示
