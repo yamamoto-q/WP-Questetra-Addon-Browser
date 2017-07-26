@@ -141,7 +141,7 @@ class WP_QuestetraAddonContent{
 			}
 		}
 
-		$resId = "addon-browser-" . $parentTermSlug;
+		$resId = $parentTermSlug;
 		$resValname = "addon_browser_" . $parentTermId;
 
 		$catalog = array(
@@ -152,7 +152,7 @@ class WP_QuestetraAddonContent{
 		$res .= 'var '.$resValname . "='".json_encode($catalog)."';";
 		$res .= 'console.log(JSON.parse('.$resValname.'));';
 		$res .= "</script>";
-		$res .= '<div id="'.$resId.'"class="addon-browser" data-catalog="'.$resValname.'">Addon Browser</div>';
+		$res .= '<div id="addon-tax-browser-'.$resId.'" class="addon-browser" data-id="'.$resId.'" data-catalog="'.$resValname.'">Addon Browser</div>';
 		return $res;
 	}
 

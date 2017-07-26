@@ -1,10 +1,11 @@
 (function($) {
   $(document).ready(function(){
+  	var HASH_SEPARATOR = "__";
   	var catalogs = {};　// データ
 
     $(".addon-browser").each(function(index, el) {
     	var me = this;
-    	var browserId = $(this).attr('id');
+    	var browserId = $(this).data('id');// = $(this).attr('id');
 
     	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
     	// Modal を追加する
@@ -105,26 +106,31 @@
     // - - - - - - - - - - - - - - - - - - - - - - - - - - 
     // モーダルを表示する（ハッシュを変更する）
     function showAddonModal(browserId, slug){
-		location.hash = browserId + "__" + slug;
+		location.hash = browserId + HASH_SEPARATOR + slug;
 	}
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	//　ハッシュが変更されたらモーダルを開く
 	function onHashChange(){
-		var ha = location.hash.split("__");
+		// ハッシュ処理
+		var ha = location.hash.split(HASH_SEPARATOR);
 		if(ha.length == 2){
+			// ハッシュから対象カタログとTermスラグを推察する
 			var browserId = ha[0].substr(1);
 			var slug = ha[1];
 			if(catalogs[browserId]){
+				// カタログを発見
+				// カタログの中から対象Termを探す
 				var filtered = catalogs[browserId].terms.filter(function(element, index, array){
 					return element.slug == slug;
 				})
-
 				if(filtered.length >= 1){
+					// Termを発見
 					var term = filtered[0];
 					var headerTitle = term.name;
-					var posts = term.posts;
 
+					// Term内Postリストを作成
+					var posts = term.posts;
 					var $posts = $('<div class="addom-browser-modal-content-body-posts" />');
 					for (var i = posts.length - 1; i >= 0; i--) {
 						var post = posts[i];
@@ -152,29 +158,36 @@
 						});
 
 					}
-
-					$('body').css('overflow','hidden');
-
-					var st = $('body').scrollTop();
-
 					$("#" + browserId + "-modal .addom-browser-modal-content-header-title").html(headerTitle);
 					$("#" + browserId + "-modal .addom-browser-modal-content-body").html($posts);
 
-					$("#" + browserId + "-modal").css('top', st).show();
+					// 表示する
+					$('body').css('overflow','hidden');	// モーダル表示中はスクロールさせない
+					$("#" + browserId + "-modal").css('top', $('body').scrollTop()).show();
+
+				}else{
+					// Term が見つからない
 				}
+			}else{
+				// カタログが見つからない
 			}
 		}else{
+			//　ハッシュを解析できない or フォーマットに合わないもの
 			hideAddonModal();
 		}
 	}
 
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	//　モーダルを非表示
 	function hideAddonModal(){
 		$(".addom-browser-modal").hide();
 		$('body').css('overflow','auto');
 		location.hash = '';
 	}
 
-	window.onhashchange = onHashChange;
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	//　初期表示
+	window.onhashchange = onHashChange;　//ハッシュが変わったら
 	onHashChange();
   });
 })(window.jQuery);
