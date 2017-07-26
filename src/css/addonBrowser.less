@@ -1,3 +1,42 @@
+/**
+ * Facebook 画像比率
+ **/
+.ttb-fbrate-o{
+	position: relative;
+	&:before{
+		display: block;
+		content: '';
+		padding-top: 52%;
+	}
+	.ttb-fbrate-i{
+		position: absolute;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		box-sizing: border-box;
+	}
+}
+/**
+ * 背景をカバー/中央に
+ **/
+.ttb-bgcover{
+	background-size: cover;
+	background-position: center center;
+}
+/**
+ * Display Table/Table-Cell を利用したセンタリング
+ **/
+.ttb-middle-o{
+	height: 100%;
+	width: 100%;
+	display: table;
+	.ttb-middle-i{
+		display: table-cell;
+		vertical-align:middle;
+		height: 100%;
+	}							
+}
+
 .addon-browser{
 	width:100%;
 	display: flex;
@@ -99,8 +138,10 @@
 		}
 	}
 }
-
-.addom-browser-modal{
+/**
+ * モーダル表現
+ **/
+.ttb-modal{
 	position: absolute;
 	top: 0;
 	width: 100%;
@@ -108,102 +149,68 @@
 	height: 100vh;
     background-color: rgba(0,0,0,0.5);
     display: none;
-    .addom-browser-modal-close{
+    .ttb-m-close{
     	cursor: pointer;
     }
-    .addom-browser-modal-outer{
-    	position: relative;
-    	width: 100%;
-    	height: 100%;
-    	display: table;
-    	.addom-browser-modal-inner{
-    		display: table-cell;
-    		vertical-align: middle;
-    		.addom-browser-modal-content{
-    			margin: 0 auto;
-    			background-color: white;
-    			width: 80%;
-  				max-width: 970px;
-  				border-radius: 5px;
-  				box-shadow: 0px 0px 3px brack;
-  				.addom-browser-modal-content-header{
-  					display: flex;
-  					flex-direction: row;
-	        		flex-wrap: nowrap;
-	        		justify-content: space-between;
-	        		padding: 0.5em 0;
-    				font-size: 2rem;
-    				border-bottom: solid 1px rgba(0,0,0,0.125);
-    				> div{
-    					margin:0 0.5em;
-    				}
-  				}
-  				.addom-browser-modal-content-footer{
-  					display: flex;
-  					flex-direction: row;
-	        		flex-wrap: nowrap;
-	        		justify-content: center;
-	        		padding: 0.5em 0;
-    				border-top: solid 1px rgba(0,0,0,0.125);
-  				}
-  				.addom-browser-modal-content-body{
-  					.addom-browser-modal-content-body-posts{
-  						display: flex;
-  						.addon-browser-addon{
-  							width: 250px;
-  							cursor: pointer;
-  							.addon-browser-addon-content{
-								padding: 2px;
-    							border: solid 1px rgba(0,0,0,0.25);
-    							margin: 2px;
-  							}
-  							.addon-browser-addon-content-eyecatch-wrapper{
-  								position: relative;
-								&:before{
-									display: block;
-									content: '';
-									padding-top: 52%;
-								}
-								.addon-browser-addon-content-eyecatch-content{
-									position: absolute;
-									top: 0;
-								    width: 100%;
-								    height: 100%;
-								    box-sizing: border-box;
-								    .addon-browser-addon-content-eyecatch-content-exc{
-								    	height: 100%;
-								    	background-size: cover;
-								    	background-position: center center;
-								    	display: table;
-								    	.addon-browser-addon-content-exc{
-								    		display: table-cell;
-								    		vertical-align:middle;
-								    		padding: 0.5rem;
-								    		height: 100%;
-								    		color:rgba(0,0,0,0);
-								    		transition: all 0.25s ease-in-out;
-								    	}
-								    }
-								}
-  							}
-  							&:hover{
-  								.addon-browser-addon-content-eyecatch-wrapper{
-  									.addon-browser-addon-content-eyecatch-content{
-  										.addon-browser-addon-content-eyecatch-content-exc{
-  											.addon-browser-addon-content-exc{
-  												background-color: rgba(0,0,0,0.5);
-  												color:rgba(255,255,255,1);
-  											}
-  										}
-  									}
-  								}
-
-  							}
-  						}
-  					}
-  				}
-    		}
-    	}
+	.ttb-m-pane{
+		margin: 0 auto;
+		background-color: white;
+		width: 80%;
+		max-width: 970px;
+		border-radius: 5px;
+		box-shadow: 0px 0px 3px brack;
+		.ttb-m-header{
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			justify-content: space-between;
+			padding: 0.5em 0;
+			font-size: 2rem;
+			border-bottom: solid 1px rgba(0,0,0,0.125);
+			> div{
+				margin:0 0.5em;
+			}
+		}
+		.ttb-m-footer{
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			justify-content: center;
+			padding: 0.5em 0;
+			border-top: solid 1px rgba(0,0,0,0.125);
+		}
+		.ttb-m-body{
+			.ttb-m-posts{
+				display: flex;
+				.ttb-post{
+					width: 250px;
+				}
+			}
+		}
     }
+}
+
+/**
+ * post表現
+ **/
+.ttb-post{
+	cursor: pointer;
+	.ttb-post-content{
+		padding: 2px;
+		border: solid 1px rgba(0,0,0,0.25);
+		margin: 2px;
+		}
+	.ttb-post-exc{
+		padding: 0.5rem;
+		color:rgba(0,0,0,0);
+		transition: all 0.25s ease-in-out;
+	}
+
+	&:hover{
+	.ttb-post-exc{
+		background-color: rgba(0,0,0,0.5);
+		color:rgba(255,255,255,1);
+	}
+	}
 }
 

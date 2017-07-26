@@ -9,14 +9,14 @@
 
     	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
     	// Modal を追加する
-    	$header = $('<div class="addom-browser-modal-content-header"><div class="addom-browser-modal-content-header-title"></div><div class="addom-browser-modal-close">x</div></div>');
-    	$body = $('<div class="addom-browser-modal-content-body">body</div>');
-    	$footer = $('<div class="addom-browser-modal-content-footer"><div class="addom-browser-modal-close">Close</div></div>');
+    	$header = $('<div class="ttb-m-header"><div class="ttb-m-title"></div><div class="addom-browser-modal-close">x</div></div>');
+    	$body = $('<div class="ttb-m-body">body</div>');
+    	$footer = $('<div class="ttb-m-footer"><div class="ttb-m-close">Close</div></div>');
 
-	  	$modalContent = $('<div class="addom-browser-modal-content"></div>');
-	  	$modalInner = $('<div class="addom-browser-modal-inner" />');
-	  	$modalOuter = $('<div class="addom-browser-modal-outer" />');
-	  	$modal = $('<div class="addom-browser-modal" />').attr('id', browserId + "-modal");
+	  	$modalContent = $('<div class="ttb-m-pane"></div>');
+	  	$modalInner = $('<div class="ttb-middle-i" />');
+	  	$modalOuter = $('<div class="ttb-middle-o" />');
+	  	$modal = $('<div class="ttb-modal" />').attr('id', browserId + "-modal");
 
 	  	$modalContent.append($header);
 	  	$modalContent.append($body);
@@ -39,7 +39,7 @@
 	  	});
 
 	  	// モーダルを消す
-	  	$(".addom-browser-modal-close").click(function(event) {
+	  	$(".ttb-m-close").click(function(event) {
 	  		hideAddonModal();
 	  	});
 
@@ -126,40 +126,37 @@
 				})
 				if(filtered.length >= 1){
 					// Termを発見
-					var term = filtered[0];
-					var headerTitle = term.name;
+					var termData = filtered[0];
+					var termName = termData.name;
 
 					// Term内Postリストを作成
-					var posts = term.posts;
-					var $posts = $('<div class="addom-browser-modal-content-body-posts" />');
-					for (var i = posts.length - 1; i >= 0; i--) {
-						var post = posts[i];
-						console.log('post', i, post);
+					var postsDatas = termData.posts;
 
-						var $addonName = $('<div>'+post.title+'</div>');
+					var $posts = $('<div class="ttb-m-posts" />');
+					for (var i = postsDatas.length - 1; i >= 0; i--) {
+						var postData = postsDatas[i];
 
-						var $addonExcW = $('<div class="addon-browser-addon-content-eyecatch-wrapper" />');
-						var $addonExcContent = $('<div class="addon-browser-addon-content-eyecatch-content" />');
-						var $addonExc = $('<div class="addon-browser-addon-content-eyecatch-content-exc" style="background-image:url(' + post.eyecatch + ');"><div class="addon-browser-addon-content-exc">'+post.excerpt+'</div></div>');
+						var $postTitle = $('<div class="ttb-post-title">'+postData.title+'</div>');
+						var $postThumb = $('<div class="ttb-bgcover ttb-middle-o" style="background-image:url(' + postData.eyecatch + ');"><div class="ttb-middle-i ttb-post-exc">'+postData.excerpt+'</div></div>');
+						var $postThumbIn = $('<div class="ttb-fbrate-i" />');
+						var $postThumbOut = $('<div class="ttb-fbrate-o" />');
+						var $postIn = $('<div class="ttb-post-content"/>');
+						var $post = $('<div class="ttb-post" data-href="' + postData.url + '"/>');
 
-						var $addonContent = $('<div class="addon-browser-addon-content"/>');
-						var $addon = $('<div class="addon-browser-addon" data-href="' + post.url + '"/>');
+						$postThumbIn.append($postThumb);
+						$postThumbOut.append($postThumbIn);
+						$postIn.append($postThumbOut).append($postTitle);
+						$post.append($postIn);
+						$posts.append($post);
 
-						$addonExcContent.append($addonExc);
-						$addonExcW.append($addonExcContent);
-
-						$addonContent.append($addonExcW).append($addonName);
-						$addon.append($addonContent);
-						$posts.append($addon);
-
-						$($addon).one('click', function(event) {
+						$($post).one('click', function(event) {
 							var url = $(this).data('href');
 							location.href = url;
 						});
 
 					}
-					$("#" + browserId + "-modal .addom-browser-modal-content-header-title").html(headerTitle);
-					$("#" + browserId + "-modal .addom-browser-modal-content-body").html($posts);
+					$("#" + browserId + "-modal .ttb-m-title").html(termName);
+					$("#" + browserId + "-modal .ttb-m-body").html($posts);
 
 					// 表示する
 					$('body').css('overflow','hidden');	// モーダル表示中はスクロールさせない
@@ -180,7 +177,7 @@
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	//　モーダルを非表示
 	function hideAddonModal(){
-		$(".addom-browser-modal").hide();
+		$(".ttb-modal").hide();
 		$('body').css('overflow','auto');
 		location.hash = '';
 	}
