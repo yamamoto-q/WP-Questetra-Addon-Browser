@@ -2,6 +2,7 @@
   $(document).ready(function(){
   	var HASH_SEPARATOR = "__";
   	var catalogs = {};　// データ
+  	var isClickModalOpen = false;
 
     $(".tax-term-browser").each(function(index, el) {
     	var me = this;
@@ -12,9 +13,9 @@
     	if(view == 'term'){
 	    	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	    	// Modal を追加する
-	    	$header = $('<div class="ttb-m-header"><div class="ttb-m-title"></div><div class="addom-browser-modal-close">x</div></div>');
+	    	$header = $('<div class="ttb-m-header"><div class="ttb-m-title"></div><div class="ttb-m-close ttb-btn-x">×</div></div>');
 	    	$body = $('<div class="ttb-m-body">body</div>');
-	    	$footer = $('<div class="ttb-m-footer"><div class="ttb-m-close">Close</div></div>');
+	    	$footer = $('<div class="ttb-m-footer"><div class="ttb-m-close ttb-btn">Close</div></div>');
 
 		  	$modalContent = $('<div class="ttb-m-pane"></div>');
 		  	$modalInner = $('<div class="ttb-middle-i" />');
@@ -99,13 +100,26 @@
 
 	        	$(me).append(itemHtml);
 	        }
+    	}else{
+    		var $posts = $('<div class="ttb-posts" />');
+    		for (var i = catalogs[browserId].posts.length - 1; i >= 0; i--) {
+    			var postData = catalogs[browserId].posts[i];
+    			var $post = buildPostHtml(postData);
+    			$posts.append($post);
+
+    			$($post).one('click', function(event) {
+					var url = $(this).data('href');
+					location.href = url;
+				});
+    		}
+    		$(me).append($posts);
     	}
     });
-
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - 
     // モーダルを表示する（ハッシュを変更する）
     function showAddonModal(browserId, slug){
+    	isClickModalOpen = true;
 		location.hash = browserId + HASH_SEPARATOR + slug;
 	}
 
@@ -114,7 +128,26 @@
 	function hideAddonModal(){
 		$(".ttb-modal").hide();
 		$('body').css('overflow','auto');
-		location.hash = '';
+		if(isClickModalOpen){
+			history.back();
+		}else{
+			location.hash = '';
+		}
+	}
+
+	function buildPostHtml(postData){
+		var $postTitle = $('<div class="ttb-post-title">'+postData.title+'</div>');
+		var $postThumb = $('<div class="ttb-bgcover ttb-post-thumb" style="background-image:url(' + postData.eyecatch + ');"><div class="ttb-middle-o"><div class="ttb-middle-i ttb-post-exc">'+postData.excerpt+'</div></div></div>');
+		var $postThumbIn = $('<div class="ttb-fbrate-i" />');
+		var $postThumbOut = $('<div class="ttb-fbrate-o" />');
+		var $postIn = $('<div class="ttb-post-content"/>');
+		var $post = $('<div class="ttb-post" data-href="' + postData.url + '"/>');
+
+		$postThumbIn.append($postThumb);
+		$postThumbOut.append($postThumbIn);
+		$postIn.append($postThumbOut).append($postTitle);
+		$post.append($postIn);
+		return $post;
 	}
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -126,6 +159,8 @@
 			// ハッシュから対象カタログとTermスラグを推察する
 			var browserId = ha[0].substr(1);
 			var slug = ha[1];
+			currentBrowserId = browserId;
+
 			if(catalogs[browserId]){
 				// カタログを発見
 				// カタログの中から対象Termを探す
@@ -140,23 +175,13 @@
 					// Term内Postリストを作成
 					var postsDatas = termData.posts;
 
-					var $posts = $('<div class="ttb-m-posts" />');
+					var $posts = $('<div class="ttb-posts" />');
 					for (var i = postsDatas.length - 1; i >= 0; i--) {
 						var postData = postsDatas[i];
 
-						var $postTitle = $('<div class="ttb-post-title">'+postData.title+'</div>');
-						var $postThumb = $('<div class="ttb-bgcover ttb-middle-o" style="background-image:url(' + postData.eyecatch + ');"><div class="ttb-middle-i ttb-post-exc">'+postData.excerpt+'</div></div>');
-						var $postThumbIn = $('<div class="ttb-fbrate-i" />');
-						var $postThumbOut = $('<div class="ttb-fbrate-o" />');
-						var $postIn = $('<div class="ttb-post-content"/>');
-						var $post = $('<div class="ttb-post" data-href="' + postData.url + '"/>');
+						var $post = buildPostHtml(postData);
 
-						$postThumbIn.append($postThumb);
-						$postThumbOut.append($postThumbIn);
-						$postIn.append($postThumbOut).append($postTitle);
-						$post.append($postIn);
 						$posts.append($post);
-
 						$($post).one('click', function(event) {
 							var url = $(this).data('href');
 							location.href = url;

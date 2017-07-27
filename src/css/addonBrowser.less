@@ -82,6 +82,7 @@
 			opacity: 0.8;
 			background-size:auto 100%;
 			transition: all 0.25s ease-in-out;
+			border-radius: 5px;
 		}
 		.ttb-tax-exc{
 		    flex-grow: 1;
@@ -180,37 +181,75 @@
 			border-top: solid 1px rgba(0,0,0,0.125);
 		}
 		.ttb-m-body{
-			.ttb-m-posts{
-				display: flex;
-				.ttb-post{
-					width: 250px;
-				}
-			}
+			
 		}
+
+
     }
+}
+
+.ttb-btn{
+	display: inline-block;
+    padding: 0.5em;
+    border-radius: 0.2em;
+    &:hover{
+    	background: rgba(0,0,0,0.125);
+    }
+}
+.ttb-btn-x{
+	color: rgba(0,0,0,0.25);
+	&:hover{
+		color: rgba(0,0,0,0.6);
+	}
 }
 
 /**
  * post表現
  **/
-.ttb-post{
-	cursor: pointer;
-	.ttb-post-content{
-		padding: 2px;
-		border: solid 1px rgba(0,0,0,0.25);
-		margin: 2px;
+.ttb-posts{
+	display: flex;
+	flex-wrap: wrap;
+	.ttb-post{
+		cursor: pointer;
+		width: 25%;
+		.ttb-post-content{
+			padding: 0px;
+			border: solid 1px rgba(0,0,0,0.25);
+			margin: 1px;
+			.ttb-post-thumb{
+				height: 100%;
+				overflow: hidden;
+			}
+			.ttb-post-title{
+				padding: 0.25em;
+				overflow: hidden;
+    			text-overflow: ellipsis;
+    			white-space: nowrap;
+			}
 		}
-	.ttb-post-exc{
-		padding: 0.5rem;
-		color:rgba(0,0,0,0);
-		transition: all 0.25s ease-in-out;
-	}
 
-	&:hover{
-	.ttb-post-exc{
-		background-color: rgba(0,0,0,0.5);
-		color:rgba(255,255,255,1);
-	}
+		.ttb-post-exc{
+			padding: 0.5rem;
+			color:rgba(0,0,0,0);
+			transition: all 0.25s ease-in-out;
+			font-size: 12px;
+			line-height: 1.4em;
+		}
+
+		&:hover{
+			.ttb-post-content{
+				.ttb-post-thumb{
+					overflow: auto;
+				}
+				.ttb-post-title{
+					text-decoration: underline;
+				}
+			}
+			.ttb-post-exc{
+				background-color: rgba(0,0,0,0.75);
+				color:rgba(255,255,255,1);
+			}
+		}
 	}
 }
 

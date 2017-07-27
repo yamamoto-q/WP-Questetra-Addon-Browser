@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: WP Questetra Addon Content
+Plugin Name: WP Taxonomy Browser
 Plugin URI: https://github.com/Questetra/WP-Questetra-Addon-Shortcode
 Description: Questetra Addon XML (機能拡張)　ページ関連についてのプラグイン
 Version: 0.1
@@ -10,21 +10,22 @@ License: GPL2
 */
 
 class WP_QuestetraAddonContent{
-	public $taxName = 'addon_cat';
+	public $defaulTaxSlug = 'addon_cat';
+	public $taxSlug;
 
 	// コンストラクタ
 	public function __construct(){
 		add_action('init', array(&$this, 'initCategory'));
-		add_action($this->taxName.'_edit_form_fields', array(&$this, 'addOptionToTerm'));	// タームに 画像URL INPUT　を追加する
+		add_action($this->defaulTaxSlug.'_edit_form_fields', array(&$this, 'addOptionToTerm'));	// タームに 画像URL INPUT　を追加する
 		add_action('edited_term', array(&$this, 'saveTermOptionImg'));						// タームが編集されたとき
 
-		add_shortcode('addon-browser', array(&$this, 'shortcodeA'));
+		add_shortcode('tax-browser', array(&$this, 'shortcodeA'));
 	}
 
 	// カスタムタクソノミ登録
 	function initCategory(){
 		register_taxonomy(
-			$this->taxName,									// 新規カスタムタクソノミー名
+			$this->defaulTaxSlug,									// 新規カスタムタクソノミー名
 			'page',											// 新規カスタムタクソノミーを反映させる投稿タイプの定義名
 			array(
 				'label' => __( 'アドオンカテゴリ' ),				// 表示するカスタムタクソノミー名
@@ -85,7 +86,8 @@ class WP_QuestetraAddonContent{
 	function shortcodeA($atts, $content = null){
 		$atts = shortcode_atts(array(
 			'parent' => null,
-			'view' => 'term'
+			'view' => 'term',
+			'taxonomy_slug' => null
 		), $atts);
 
 		// CSS と JS を読み込む
@@ -99,10 +101,16 @@ class WP_QuestetraAddonContent{
 		$termsArr = array();
 		$directlyUnderPostsArr = array();
 
+		if(empty($atts['taxonomy_slug'])){
+			$this->taxSlug = $this->defaulTaxSlug;
+		}else{
+			$this->taxSlug = $atts['taxonomy_slug'];
+		}
+
 		// 親ターム名からIDを検索する
 		$parentTermId = 0;
 		if(!empty($atts['parent'])){
-			$parentTerm = get_term_by('name', $atts['parent'], $this->taxName);
+			$parentTerm = get_term_by('name', $atts['parent'], $this->taxSlug);
 			if(!empty($parentTerm)){
 				$parentTermId = $parentTerm->term_id;
 				$parentTermSlug = $parentTerm->slug;
@@ -113,7 +121,7 @@ class WP_QuestetraAddonContent{
 		// カタログデータ作成
 		// 親タームに直下のタームを取得する
 		//$directlyUnder
-		$directlyUnderTerms = get_terms($this->taxName, array('parent' => $parentTermId));
+		$directlyUnderTerms = get_terms($this->taxSlug, array('parent' => $parentTermId));
 		if(!empty($directlyUnderTerms)){
 			foreach ($directlyUnderTerms as $directlyUnderTerm){
 				$termId = $directlyUnderTerm->term_id;
@@ -128,7 +136,7 @@ class WP_QuestetraAddonContent{
 					'post_type' => 'page',
 					'tax_query' => array(
 						array(
-						'taxonomy' => $this->taxName,
+						'taxonomy' => $this->taxSlug,
 						'field' => 'slug',
 						'terms' => $termSlug
 						)
@@ -159,7 +167,7 @@ class WP_QuestetraAddonContent{
 			'post_type' => 'page',
 			'tax_query' => array(
 				array(
-				'taxonomy' => $this->taxName,
+				'taxonomy' => $this->taxSlug,
 				'field' => 'slug',
 				'terms' => $parentTermSlug,
 				'include_children' => false
