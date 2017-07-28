@@ -189,7 +189,12 @@ class WP_QuestetraAddonContent{
 		$resValname = "addon_browser_" . $parentTermId;
 
 		$res = '<script type="text/javascript">';
-		$res .= 'var '.$resValname . "='".esc_attr(json_encode($catalog))."';";
+
+		//　JSON String 'をエスケープ
+		$jsonString = json_encode($catalog);
+		$jsonString = str_replace("'", "\'", $jsonString);
+		$res .= 'var '.$resValname . " ='" . $jsonString . "'";
+
 		$res .= "</script>";
 
 		$res .= '<div id="tax-term-browser-'.$resId.'" class="tax-term-browser" data-id="'.$resId.'" data-catalog="'.$resValname.'" data-view="'.$atts['view'].'">Addon Browser</div>';
@@ -199,5 +204,3 @@ class WP_QuestetraAddonContent{
 }
 
 $samplePlugin = new WP_QuestetraAddonContent();
-
-
