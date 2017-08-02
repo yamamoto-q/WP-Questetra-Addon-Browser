@@ -61,8 +61,8 @@ class WP_QuestetraAddonContent{
 	 **/
 	function _postToArr($_post){
 		$_postId = $_post->ID;
-		$_postTitle = $_post->post_title;
-		$_postExcerpt = $_post->post_excerpt;
+		$_postTitle = $this->_stripBr($_post->post_title);
+		$_postExcerpt = $this->_stripBr($_post->post_excerpt);
 		$_postPermalink = get_permalink($_postId);
 
 		$_postThumbnail = "";
@@ -79,6 +79,13 @@ class WP_QuestetraAddonContent{
 			'url' => $_postPermalink,
 			'eyecatch' => $_postThumbnail
 		);
+	}
+
+	/**
+	 * 文字列から改行を取り除く
+	 **/
+	function _stripBr($str){
+		return str_replace(array("\r\n", "\r", "\n"), '', $str);
 	}
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -126,10 +133,10 @@ class WP_QuestetraAddonContent{
 			foreach ($directlyUnderTerms as $directlyUnderTerm){
 				$termId = $directlyUnderTerm->term_id;
 				$termSlug = $directlyUnderTerm->slug;
-				$termName = $directlyUnderTerm->name;
-				$termDesc = $directlyUnderTerm->description;
+				$termName = $this->_stripBr($directlyUnderTerm->name);
+				$termDesc = $this->_stripBr($directlyUnderTerm->description);
 				$termCount = $directlyUnderTerm->count;
-				$termOptionImgVal = get_option("term_option_img_".$termId);
+				$termOptionImgVal = $this->_stripBr(get_option("term_option_img_".$termId));
 
 				// Term配下の投稿を詰める
 				$termPosts = get_posts(array(
