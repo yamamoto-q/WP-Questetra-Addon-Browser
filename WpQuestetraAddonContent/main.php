@@ -3,7 +3,7 @@
 Plugin Name: WP Taxonomy Browser
 Plugin URI: https://github.com/Questetra/WP-Questetra-Addon-Shortcode
 Description: Questetra Addon XML (機能拡張)　ページ関連についてのプラグイン
-Version: 0.2
+Version: 0.3
 Author: June YAMAMOTO
 Author URI: https://www.questetra.com/
 License: GPL2
