@@ -3,6 +3,7 @@
   	var HASH_SEPARATOR = "__";
   	var catalogs = {};　// データ
   	var isClickModalOpen = false;
+  	var currentBrowserId = null;
 
     $(".tax-term-browser").each(function(index, el) {
     	var me = this;
@@ -39,12 +40,12 @@
 
 		  	// モーダルの背景をクリックしたらモーダルを消す
 		  	$modal.click(function(event) {
-		  		hideAddonModal();
+		  		hideAddonModal(true);
 		  	});
 
 		  	// モーダルを消す
 		  	$(".ttb-m-close").click(function(event) {
-		  		hideAddonModal();
+		  		hideAddonModal(true);
 		  	});
 	  	}
 
@@ -119,19 +120,27 @@
     // - - - - - - - - - - - - - - - - - - - - - - - - - - 
     // モーダルを表示する（ハッシュを変更する）
     function showAddonModal(browserId, slug){
-    	isClickModalOpen = true;
+    	//isClickModalOpen = true;
 		location.hash = browserId + HASH_SEPARATOR + slug;
 	}
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	//　モーダルを非表示
-	function hideAddonModal(){
+	function hideAddonModal(isHistoryBack){
+		modalFitTimer(false);
 		$(".ttb-modal").hide();
 		$('body').css('overflow','auto');
-		if(isClickModalOpen){
-			history.back();
-		}else{
-			location.hash = '';
+
+		if(isHistoryBack){
+			// isClickModalOpe
+			// document.referrer
+			//console.log("isClickModalOpen", isClickModalOpen);
+			if(isClickModalOpen){
+				history.back();
+			}else if(currentBrowserId){
+				location.hash = "tax-term-browser-" + currentBrowserId;
+				currentBrowserId = null;
+			}
 		}
 	}
 
@@ -150,9 +159,34 @@
 		return $post;
 	}
 
+	/**
+	 * 稀にモーダルがずれるので、タイマーで表示修正
+	 **/
+	var modalFitTimerId = false;
+	function modalFitTimer(flg, browserId){
+		if(flg){
+			if(modalFitTimerId){
+				//clearInterval(modalFitTimerId);
+				modalFitTimerId = false;
+			}
+			modalFitTimerId = setInterval(function(){
+				//console.log("modalFitTimer", browserId);
+				$("#" + browserId + "-modal").css('top', $('body').scrollTop());
+			}, 500);
+		}else{
+			//console.log("modalFitTimer", 'stop');
+			if(modalFitTimerId){
+				clearInterval(modalFitTimerId);
+			}
+			modalFitTimerId = false;
+		}
+	}
+
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	//　ハッシュが変更されたらモーダルを開く
 	function onHashChange(){
+		//console.log("onHashChange", location.hash);
+
 		// ハッシュ処理
 		var ha = location.hash.split(HASH_SEPARATOR);
 		if(ha.length == 2){
@@ -160,6 +194,7 @@
 			var browserId = ha[0].substr(1);
 			var slug = ha[1];
 			currentBrowserId = browserId;
+			//console.log("currentBrowserId", currentBrowserId);
 
 			if(catalogs[browserId]){
 				// カタログを発見
@@ -188,12 +223,15 @@
 						});
 
 					}
+
 					$("#" + browserId + "-modal .ttb-m-title").html(termName);
 					$("#" + browserId + "-modal .ttb-m-body").html($posts);
 
 					// 表示する
 					$('body').css('overflow','hidden');	// モーダル表示中はスクロールさせない
 					$("#" + browserId + "-modal").css('top', $('body').scrollTop()).show();
+
+					modalFitTimer(true, browserId);
 
 				}else{
 					// Term が見つからない
@@ -203,7 +241,7 @@
 			}
 		}else{
 			//　ハッシュを解析できない or フォーマットに合わないもの
-			hideAddonModal();
+			hideAddonModal(false);
 		}
 	}
 
@@ -212,6 +250,7 @@
 		var slug = $(this).data('slug');
 		var browserId = $(this).data('id');
 		showAddonModal(browserId, slug);
+		isClickModalOpen = true;
 	});
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - 
