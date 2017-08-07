@@ -142,6 +142,7 @@ class WP_QuestetraAddonContent{
 				$termPosts = get_posts(array(
 					'post_type' => 'page',
 					'posts_per_page' => -1,
+					'orderby' => 'menu_order',
 					'tax_query' => array(
 						array(
 						'taxonomy' => $this->taxSlug,
@@ -174,6 +175,7 @@ class WP_QuestetraAddonContent{
 		$directlyUnderPosts = get_posts(array(
 			'posts_per_page' => -1,
 			'post_type' => 'page',
+			'orderby' => 'menu_order',
 			'tax_query' => array(
 				array(
 				'taxonomy' => $this->taxSlug,
