@@ -3,7 +3,7 @@
 Plugin Name: WP Taxonomy Browser
 Plugin URI: https://github.com/Questetra/WP-Questetra-Addon-Shortcode
 Description: Questetra Addon XML (機能拡張)　ページ関連についてのプラグイン
-Version: 0.4
+Version: 0.5
 Author: June YAMAMOTO
 Author URI: https://www.questetra.com/
 License: GPL2
@@ -41,8 +41,9 @@ class WP_QuestetraAddonContent{
 		$termOptionImgVal = get_option("term_option_img_".$termId);
 ?>
 <tr class="form-field">
-	<th><label for="addonTermImg">バナー画像URL</label></th>
+	<th><label for="addonTermImg">カテゴリー画像　（WP Taxonomy Browser）</label></th>
 	<td>
+		「WP Taxonomy Browser」でカテゴリを表示する際のアイキャッチ画像になります。推奨:1200x600px<br />
 		<input id="addonTermImg" type="text" size="36" name="addonTermImg" value="<?php echo($termOptionImgVal); ?>" /><br />
 	</td>
 </tr>
