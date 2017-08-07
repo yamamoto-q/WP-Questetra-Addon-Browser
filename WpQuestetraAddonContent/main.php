@@ -3,7 +3,7 @@
 Plugin Name: WP Taxonomy Browser
 Plugin URI: https://github.com/Questetra/WP-Questetra-Addon-Shortcode
 Description: Questetra Addon XML (機能拡張)　ページ関連についてのプラグイン
-Version: 0.3
+Version: 0.4
 Author: June YAMAMOTO
 Author URI: https://www.questetra.com/
 License: GPL2
@@ -141,6 +141,7 @@ class WP_QuestetraAddonContent{
 				// Term配下の投稿を詰める
 				$termPosts = get_posts(array(
 					'post_type' => 'page',
+					'posts_per_page' => -1,
 					'tax_query' => array(
 						array(
 						'taxonomy' => $this->taxSlug,
@@ -171,6 +172,7 @@ class WP_QuestetraAddonContent{
 
 		// 直下Post
 		$directlyUnderPosts = get_posts(array(
+			'posts_per_page' => -1,
 			'post_type' => 'page',
 			'tax_query' => array(
 				array(
