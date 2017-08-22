@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: WP Taxonomy Browser
-Plugin URI: https://github.com/Questetra/WP-Questetra-Addon-Shortcode
-Description: Questetra Addon XML (機能拡張)　ページ関連についてのプラグイン
-Version: 0.6
+Plugin URI: https://github.com/yamamoto-q/WP-Questetra-Addon-Browser
+Description: タクソノミ階層をリッチにブラウジングするためのショートコード
+Version: 0.7
 Author: June YAMAMOTO
 Author URI: https://www.questetra.com/
 License: GPL2
@@ -17,7 +17,7 @@ class WP_QuestetraAddonContent{
 	public function __construct(){
 		add_action('init', array(&$this, 'initCategory'));
 		add_action($this->defaulTaxSlug.'_edit_form_fields', array(&$this, 'addOptionToTerm'));	// タームに 画像URL INPUT　を追加する
-		add_action('edited_term', array(&$this, 'saveTermOptionImg'));						// タームが編集されたとき
+		add_action('edited_term', array(&$this, 'saveTermOptionImg'));							// タームが編集されたとき
 
 		add_shortcode('tax-browser', array(&$this, 'shortcodeA'));
 	}
@@ -25,7 +25,7 @@ class WP_QuestetraAddonContent{
 	// カスタムタクソノミ登録
 	function initCategory(){
 		register_taxonomy(
-			$this->defaulTaxSlug,									// 新規カスタムタクソノミー名
+			$this->defaulTaxSlug,							// 新規カスタムタクソノミー名
 			'page',											// 新規カスタムタクソノミーを反映させる投稿タイプの定義名
 			array(
 				'label' => __( 'アドオンカテゴリ' ),				// 表示するカスタムタクソノミー名
@@ -39,12 +39,20 @@ class WP_QuestetraAddonContent{
 	function addOptionToTerm($tag){
 		$termId = $tag->term_id;
 		$termOptionImgVal = get_option("term_option_img_".$termId);
+		$addonTermSortVal = get_option("term_option_sort_".$termId);
 ?>
 <tr class="form-field">
 	<th><label for="addonTermImg">カテゴリー画像　（WP Taxonomy Browser）</label></th>
 	<td>
 		「WP Taxonomy Browser」でカテゴリを表示する際のアイキャッチ画像になります。推奨:1200x600px<br />
 		<input id="addonTermImg" type="text" size="36" name="addonTermImg" value="<?php echo($termOptionImgVal); ?>" /><br />
+	</td>
+</tr>
+<tr class="form-field">
+	<th><label for="addonTermSort">表示順　（WP Taxonomy Browser）</label></th>
+	<td>
+		「WP Taxonomy Browser」でカテゴリを表示する際の表示時順：小さいものほど優先<br />
+		<input id="addonTermSort" type="number" size="36" name="addonTermSort" value="<?php echo($addonTermSortVal); ?>" /><br />
 	</td>
 </tr>
 <?php
@@ -54,6 +62,10 @@ class WP_QuestetraAddonContent{
 	function saveTermOptionImg($termId){
 		if ( isset( $_POST['addonTermImg'] ) ) {
 			update_option("term_option_img_".$termId, $_POST['addonTermImg']);
+		}
+		if ( isset( $_POST['addonTermSort'] ) ) {
+			$sort = intval($_POST['addonTermSort'], 10);
+			update_option("term_option_sort_".$termId, $sort);
 		}
 	}
 
@@ -107,6 +119,7 @@ class WP_QuestetraAddonContent{
 
 		// JSON に詰めるデータ (catalog)
 		$termsArr = array();
+		$sortIndexArr = array();
 		$directlyUnderPostsArr = array();
 
 		if(empty($atts['taxonomy_slug'])){
@@ -130,6 +143,7 @@ class WP_QuestetraAddonContent{
 		// 親タームに直下のタームを取得する
 		//$directlyUnder
 		$directlyUnderTerms = get_terms($this->taxSlug, array('parent' => $parentTermId));
+
 		if(!empty($directlyUnderTerms)){
 			foreach ($directlyUnderTerms as $directlyUnderTerm){
 				$termId = $directlyUnderTerm->term_id;
@@ -137,7 +151,8 @@ class WP_QuestetraAddonContent{
 				$termName = $this->_stripBr($directlyUnderTerm->name);
 				$termDesc = $this->_stripBr($directlyUnderTerm->description);
 				$termCount = $directlyUnderTerm->count;
-				$termOptionImgVal = $this->_stripBr(get_option("term_option_img_".$termId));
+				$termOptionImgVal = get_option("term_option_img_".$termId);
+				$termOptionSortVal = get_option("term_option_sort_".$termId);
 
 				// Term配下の投稿を詰める
 				$termPosts = get_posts(array(
@@ -159,18 +174,44 @@ class WP_QuestetraAddonContent{
 					}
 				}
 
+				// ソート順を決定する
+				$index = $termOptionSortVal;
+				if(empty($index)){
+					$index = 0;
+				};
+				$index = intval($index);
+				while(!empty($sortIndexArr[$index])){
+					$index++;
+				};
+
 				// JSON用に配列化
-				$termsArr[] = array(
+				$termData = array(
 					'ID' => $termId,
 					'slug' => $termSlug,
 					'name' => $termName,
 					'description' => $termDesc,
 					'count' => $termCount,
 					'img' => $termOptionImgVal,
-					'posts' => $itemPosts
+					'posts' => $itemPosts,
+					'sort' => $index
 				);
+
+				$termsArr[] = $termData;
+				$sortIndexArr[$index] = $termData;
 			}
+
+			// ソート
+			usort($termsArr, function($a, $b) {
+				if($a['sort'] == $b['sort']){
+					return 0;
+				}
+				if($a['sort'] < $b['sort']){
+					return 1;
+				}
+				return -1;
+			});
 		}
+
 
 		// 直下Post
 		$directlyUnderPosts = get_posts(array(
