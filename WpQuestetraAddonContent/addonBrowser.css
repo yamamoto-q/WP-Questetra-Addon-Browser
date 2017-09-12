@@ -160,6 +160,9 @@
 .ttb-modal .ttb-m-pane .ttb-m-header > div {
   margin: 0 0.5em;
 }
+.ttb-modal .ttb-m-pane .ttb-m-header .ttb-m-title {
+  width: 100%;
+}
 .ttb-modal .ttb-m-pane .ttb-m-footer {
   display: flex;
   flex-direction: row;
