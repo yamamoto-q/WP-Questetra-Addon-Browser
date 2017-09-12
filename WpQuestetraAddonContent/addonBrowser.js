@@ -186,6 +186,7 @@
 	//　ハッシュが変更されたらモーダルを開く
 	function onHashChange(){
 		//console.log("onHashChange", location.hash);
+		//console.log(catalogs);
 
 		// ハッシュ処理
 		var ha = location.hash.split(HASH_SEPARATOR);
@@ -197,14 +198,20 @@
 			//console.log("currentBrowserId", currentBrowserId);
 
 			if(catalogs[browserId]){
+				//console.log(catalogs[browserId]);
+				var description = catalogs[browserId].description;
+
 				// カタログを発見
 				// カタログの中から対象Termを探す
 				var filtered = catalogs[browserId].terms.filter(function(element, index, array){
 					return element.slug == slug;
 				})
+
+
 				if(filtered.length >= 1){
 					// Termを発見
 					var termData = filtered[0];
+
 					var termName = termData.name;
 
 					// Term内Postリストを作成
@@ -224,7 +231,7 @@
 
 					}
 
-					$("#" + browserId + "-modal .ttb-m-title").html(termName);
+					$("#" + browserId + "-modal .ttb-m-title").html(termName + " <small style='font-size:12px;'>" + description + "</small>");
 					$("#" + browserId + "-modal .ttb-m-body").html($posts);
 
 					// 表示する

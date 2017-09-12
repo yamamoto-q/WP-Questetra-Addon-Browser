@@ -3,7 +3,7 @@
 Plugin Name: WP Taxonomy Browser
 Plugin URI: https://github.com/yamamoto-q/WP-Questetra-Addon-Browser
 Description: タクソノミ階層をリッチにブラウジングするためのショートコード
-Version: 0.7
+Version: 0.8
 Author: June YAMAMOTO
 Author URI: https://www.questetra.com/
 License: GPL2
@@ -107,7 +107,8 @@ class WP_QuestetraAddonContent{
 		$atts = shortcode_atts(array(
 			'parent' => null,
 			'view' => 'term',
-			'taxonomy_slug' => null
+			'taxonomy_slug' => null,
+			'description' => ""
 		), $atts);
 
 		// CSS と JS を読み込む
@@ -193,7 +194,7 @@ class WP_QuestetraAddonContent{
 					'count' => $termCount,
 					'img' => $termOptionImgVal,
 					'posts' => $itemPosts,
-					'sort' => $index
+					'sort' => $index,
 				);
 
 				$termsArr[] = $termData;
@@ -234,6 +235,7 @@ class WP_QuestetraAddonContent{
 		}
 
 		$catalog = array(
+			'description' => $atts['description'],
 			'terms' => $termsArr,
 			'posts' => $directlyUnderPostsArr
 		);
