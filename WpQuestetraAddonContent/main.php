@@ -87,8 +87,8 @@ class WP_QuestetraAddonContent{
 
 		return array(
 			'ID' => $_postId,
-			'title' => $_postTitle,
-			'excerpt' => $_postExcerpt,
+			'title' => esc_attr($_postTitle),
+			'excerpt' => esc_attr($_postExcerpt),
 			'url' => $_postPermalink,
 			'eyecatch' => $_postThumbnail
 		);
