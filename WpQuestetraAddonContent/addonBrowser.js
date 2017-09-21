@@ -171,7 +171,7 @@
 			}
 			modalFitTimerId = setInterval(function(){
 				//console.log("modalFitTimer", browserId);
-				$("#" + browserId + "-modal").css('top', $('body').scrollTop());
+				$("#" + browserId + "-modal").css('top', $(window).scrollTop());
 			}, 500);
 		}else{
 			//console.log("modalFitTimer", 'stop');
@@ -236,7 +236,8 @@
 
 					// 表示する
 					$('body').css('overflow','hidden');	// モーダル表示中はスクロールさせない
-					$("#" + browserId + "-modal").css('top', $('body').scrollTop()).show();
+
+					$("#" + browserId + "-modal").css('top', $(window).scrollTop()).show();
 
 					modalFitTimer(true, browserId);
 
